@@ -7,11 +7,15 @@ from datetime import datetime
 API_KEY = os.getenv("API_KEY")
 
 if not API_KEY:
-    raise ValueError("API Key is missing! Please set API_KEY in environment variables.")
+    raise RuntimeError("❌ API Key is missing! Please set API_KEY in Render environment variables.")
 
 gmaps = googlemaps.Client(key=API_KEY)
 
 app = FastAPI()
+
+@app.get("/test_api_key")
+def test_api_key():
+    return {"API_KEY": API_KEY[:5] + "*****"}  # إظهار جزء صغير فقط للتحقق
 
 @app.get("/get_optimized_route")
 def get_optimized_route(origin: str, destination: str):
